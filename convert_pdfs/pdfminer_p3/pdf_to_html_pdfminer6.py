@@ -10,8 +10,8 @@ import datetime as dt
 
 def convert(case,pathin, fileHTML):
 
-    #Define parameters to the PDF device objet   
-    manager = PDFResourceManager() 
+    #Define parameters to the PDF device objet
+    manager = PDFResourceManager()
     codec = 'utf-8'
     caching = True
     laparams = LAParams()
@@ -30,7 +30,7 @@ def convert(case,pathin, fileHTML):
         converter = HTMLConverter(manager, output, codec=codec, laparams=LAParams())
 
     #Create PDF interpreter object
-    interpreter = PDFPageInterpreter(manager, converter)   
+    interpreter = PDFPageInterpreter(manager, converter)
     infile = open(pathin, 'rb')
 
 
@@ -43,12 +43,12 @@ def convert(case,pathin, fileHTML):
     infile.close()
     converter.close()
     output.close()
-    
+
     return convertedPDF
 
 if __name__ == "__main__":
-    path1 = "/Users/dariaulybina/Desktop/georgetown/global-economics/convert_pdfs/pdfminer_p3/" #pdf inputs directory
-    path2 = "/Users/dariaulybina/Desktop/georgetown/global-economics/convert_pdfs/pdfminer_p3/" #outputs directory
+    path1 = "/Users/jchan/global-economics/convert_pdfs/pdfminer_p3/" #pdf inputs directory
+    path2 = "/Users/jchan/global-economics/convert_pdfs/pdfminer_p3/" #outputs directory
 
     #Read the list of documents to convert and make a list (make sure those documents exist in input directory)
     #data = list(csv.DictReader(open("U:\\....\\doc_list.csv", "r", encoding="UTF-8", errors="ignore"))
@@ -59,10 +59,10 @@ if __name__ == "__main__":
         #doc_list.append(docs)
 
     #Example file that works (example that doesn't -doc-_cr1606.pdf)
-    doc_list = ['-doc-cr1701.pdf']
+    doc_list = ['-doc-cr1711.pdf']
 
     #Declare case to be converted to (#if you want txt - put 'text')
-    case = "HTML" 
+    case = "HTML"
     for filePDF in doc_list:
         print("Working with doc: {}".format(filePDF))
         fileHTML = filePDF.replace('pdf','html')
@@ -76,12 +76,3 @@ if __name__ == "__main__":
 
         #print(convertedPDF)
         print("Done with file {}".format(fileHTML))
-
-        
-        
- 
-
-
-
-   
-       
