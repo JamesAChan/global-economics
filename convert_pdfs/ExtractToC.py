@@ -3,11 +3,11 @@ import re, csv, os
 
 
 def getTable(filename):
-		with open('/Home/ubuntu/HTMLs/{}'.format(filename), 'rb') as html:
+		with open('/home/ubuntu/HTMLs/{}'.format(filename), 'rb') as html:
 			soup = BeautifulSoup(html,"lxml")
 		test = soup(text=re.compile(r'.*_.[0-9]'))
 		filename2 = filename.replace('html','txt')
-		f = open('/Home/ubuntu/Tables/{}'.format(filename2), 'w')
+		f = open('/home/ubuntu/Tables/{}'.format(filename2), 'w')
 		for elem in test:
 			f.write(elem)
 			f.write('\n')
@@ -28,7 +28,7 @@ def get_Txt(Loc):
             Files.append(names)
     return Files
 def txttocsv(filenames):
-		F= open("/Home/ubuntu/Tables/{}".format(filenames),'r')
+		F= open("/home/ubuntu/Tables/{}".format(filenames),'r')
 		C = F.readlines()
 		List=[]
 		filename2 = filenames.replace('txt','csv')
@@ -46,8 +46,8 @@ def txttocsv(filenames):
 			writer.writerow(T)
 		CS.close()
 def main():
-	DocList = get_Htmls("/Home/ubuntu/HTMLs/")
-	#DocList2 = get_Txt("/Home/ubuntu/ProjPdf/Tables/")
+	DocList = get_Htmls("/home/ubuntu/HTMLs/")
+	#DocList2 = get_Txt("/home/ubuntu/ProjPdf/Tables/")
 	for doc in DocList:
 		getTable(doc)
 	#for doc2 in DocList2:

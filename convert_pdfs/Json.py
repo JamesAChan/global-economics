@@ -10,11 +10,11 @@ def get_Txt(Loc):
     return Files
 
 def createJson():
-	DocList = get_Txt("/Home/ubuntu/Tables/")
+	DocList = get_Txt("/home/ubuntu/Tables/")
 	data = []
 	for doc in DocList:
 		List=[]
-		f = open("/Home/ubuntu/Tables/{}".format(doc), 'r')
+		f = open("/home/ubuntu/Tables/{}".format(doc), 'r')
 		C = f.readlines()
 		for con in C:
 			if "APPRAISAL" in con:
@@ -25,7 +25,7 @@ def createJson():
 		key = doc.split(".txt")[0]
 		data.append({key : List})
 		json_data = json.dumps(data)
-	fil = open('/Home/ubuntu/Json.txt','w')
+	fil = open('/home/ubuntu/Json.txt','w')
 	fil.write(json_data)
 	fil.close
 def main():
