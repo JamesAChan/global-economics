@@ -10,11 +10,11 @@ def get_Txt(Loc):
     return Files
 
 def createJson():
-	DocList = get_Txt("/Users/AYB/ProjPdf/Tables/")
+	DocList = get_Txt("/Home/ubuntu/Tables/")
 	data = []
 	for doc in DocList:
 		List=[]
-		f = open("/Users/AYB/ProjPdf/Tables/{}".format(doc), 'r')
+		f = open("/Home/ubuntu/Tables/{}".format(doc), 'r')
 		C = f.readlines()
 		for con in C:
 			if "APPRAISAL" in con:
@@ -25,11 +25,11 @@ def createJson():
 		key = doc.split(".txt")[0]
 		data.append({key : List})
 		json_data = json.dumps(data)
-	fil = open('C:/Users/AYB/ProjPdf/Json.txt','w')
+	fil = open('/Home/ubuntu/Json.txt','w')
 	fil.write(json_data)
 	fil.close
 def main():
 	createJson()
-				
+
 if __name__ == '__main__':
 	main()
