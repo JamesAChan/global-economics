@@ -161,7 +161,7 @@ files_list = get_list_files(filedir2)
 for f in files_list:
     name_file = f.replace('.html','')
     print("Reading file : {}".format(f))
-    if f in json_list:
+    if name_file in json_list:
         # Get the content table for document from json file
         list1, list2 = get_content_table(name_file)
 
