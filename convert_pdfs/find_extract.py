@@ -146,6 +146,9 @@ def get_chunks(newlist, dictionary, headReg):
     return good_list
 
 #################################################
+with open('/home/ubuntu/contents.json') as data:
+    data2=json.load(data)
+    json_list=data2.keys()
 
 #change this to folder location where your html files are stored
 filedir2 = '/home/ubuntu/HTMLs/'
@@ -158,51 +161,53 @@ files_list = get_list_files(filedir2)
 for f in files_list:
     name_file = f.replace('.html','')
     print("Reading file : {}".format(f))
+    if f in json_list:
+        # Get the content table for document from json file
+        list1, list2 = get_content_table(name_file)
 
-    # Get the content table for document from json file
-    list1, list2 = get_content_table(name_file)
+        # Read html and grab all tags that have text
+        soup = BeautifulSoup(open(os.path.join(filedir2, f), encoding = 'utf-8'), 'html.parser')
 
-    # Read html and grab all tags that have text
-    soup = BeautifulSoup(open(os.path.join(filedir2, f), encoding = 'utf-8'), 'html.parser')
+        #data is an iterable object where text of each tag is an element
+        data = soup.find_all(text=True)
 
-    #data is an iterable object where text of each tag is an element
-    data = soup.find_all(text=True)
+        # To see how it looks with different empty spaces, uncomment lines below:
+        #for d in data:
+            #print(repr(d))
 
-    # To see how it looks with different empty spaces, uncomment lines below:
-    #for d in data:
-        #print(repr(d))
+        #normalize_spaces function eliminates all types of spaces (\t,\n,\r,\n\n\n\t...) + replaces them with standard 1-element space
+        main = normalize_spaces(data, list1)
 
-    #normalize_spaces function eliminates all types of spaces (\t,\n,\r,\n\n\n\t...) + replaces them with standard 1-element space
-    main = normalize_spaces(data, list1)
+        # eliminate_redundancy function identifies most common elements from the list and eliminate evrth that has frequency > 2
+        # For example, 'INTERNATIONAL MONETARY FUND' occuring on every page as a footer/header will be eliminated.
+        # Also eliminates symbols, parts of tables, figures, charts etc
+        newlist = eliminate_redundancy(main)
 
-    # eliminate_redundancy function identifies most common elements from the list and eliminate evrth that has frequency > 2
-    # For example, 'INTERNATIONAL MONETARY FUND' occuring on every page as a footer/header will be eliminated.
-    # Also eliminates symbols, parts of tables, figures, charts etc
-    newlist = eliminate_redundancy(main)
+        # headReg - regex pattern that matches one of the elements from table of content list (headers)
+        headReg =  re.compile(r'|'.join(list2), re.DOTALL)
+        #print(headReg)
 
-    # headReg - regex pattern that matches one of the elements from table of content list (headers)
-    headReg =  re.compile(r'|'.join(list2), re.DOTALL)
-    #print(headReg)
+        # get_dictionary_anchors creates dictionary - each header (except for the last one) is a key with value of the next element
+        # Example: {'Intrpdoction': 'Topic 1', 'Topic 1': 'Topic 2', 'Topic 2': 'Conclusion'}
+        dictionary = get_dictionary_anchors(list1)
+        #print(repr(dictionary))
 
-    # get_dictionary_anchors creates dictionary - each header (except for the last one) is a key with value of the next element
-    # Example: {'Intrpdoction': 'Topic 1', 'Topic 1': 'Topic 2', 'Topic 2': 'Conclusion'}
-    dictionary = get_dictionary_anchors(list1)
-    #print(repr(dictionary))
+        # get_chunks iterates over the list of 'lines' (obtained from BeautifulSoup, cleaned and normalized)
+        # When the element of content table (header) is matched, a dictionary with 'head','tail' is created, 'tail' = empty list
+        # After the header match, every following element gets appended to 'tail', creating the body of text chunk
+        # When the anchor (next header element) matches with a line - appending stops and returns dictionary
+        # Function returns 1 list of dictionaries for a document with key-value pairs: 'head': element of content table,
+        # 'tail': everything between the element of content table and next the following element of the content table
+        good_list = get_chunks(newlist, dictionary, headReg)
 
-    # get_chunks iterates over the list of 'lines' (obtained from BeautifulSoup, cleaned and normalized)
-    # When the element of content table (header) is matched, a dictionary with 'head','tail' is created, 'tail' = empty list
-    # After the header match, every following element gets appended to 'tail', creating the body of text chunk
-    # When the anchor (next header element) matches with a line - appending stops and returns dictionary
-    # Function returns 1 list of dictionaries for a document with key-value pairs: 'head': element of content table,
-    # 'tail': everything between the element of content table and next the following element of the content table
-    good_list = get_chunks(newlist, dictionary, headReg)
-
-    # create dictionary with content and document id and append the output to final list
-    dict2 = {
-        'doc': name_file,
-        'content': good_list
-        }
-    FinalList.append(dict2)
+        # create dictionary with content and document id and append the output to final list
+        dict2 = {
+            'doc': name_file,
+            'content': good_list
+            }
+        FinalList.append(dict2)
+    else:
+        continue
 
 # save the final list of ids and contents to json
 with open('/home/ubuntu/file_out.json', 'w') as outfile:
