@@ -146,12 +146,12 @@ def get_chunks(newlist, dictionary, headReg):
     return good_list
 
 #################################################
-with open('/home/ubuntu/contents.json') as data:
+with open('/home/ubuntu/global-economics/contents.json') as data:
     data2=json.load(data)
     json_list=data2.keys()
 
 #change this to folder location where your html files are stored
-filedir2 = '/home/ubuntu/HTMLs/'
+filedir2 = '/home/ubuntu/global-economics/HTMLs/'
 
 FinalList = []
 
@@ -208,7 +208,8 @@ for f in files_list:
         FinalList.append(dict2)
     else:
         continue
-
+#/Users/jchan/GeorgetownDS
+#/home/ubuntu
 # save the final list of ids and contents to json
-with open('/home/ubuntu/file_out.json', 'w') as outfile:
+with open('/home/ubuntu/global-economics/file_out.json', 'w') as outfile:
     json.dump(FinalList, outfile, sort_keys=True,  indent = 4)
