@@ -1,0 +1,4 @@
+All files (.pdf) in original directory: ['-doc-_cr16296.pdf', '-doc-_cr16298.pdf', '-doc-_cr16300.pdf', '-doc-_cr16334.pdf']
+Total documents (.pdf): 4
+Total time: 186.94870651100064 seconds.
+
